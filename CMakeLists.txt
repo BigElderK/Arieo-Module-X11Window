@@ -13,9 +13,6 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
             ${CMAKE_CURRENT_SOURCE_DIR}/private/src/*/*.cpp
         INTERFACES
             Arieo-Interface-Window::arieo_window_interface
-        PACKAGES
-            Arieo-Interface-Window
-            Arieo-Core
         PRIVATE_LIBS
             arieo::base
             arieo::core
