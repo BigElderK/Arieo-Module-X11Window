@@ -21,4 +21,8 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
             ${CMAKE_CURRENT_SOURCE_DIR}/private/src/*.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/private/src/*/*.cpp
     )
+else()
+    # Create a dummy install target for non-Linux platforms
+    message(STATUS "Arieo-Module-X11Window: Skipping build for ${CMAKE_SYSTEM_NAME} (Linux only)")
+    install(CODE "message(STATUS \"Arieo-Module-X11Window: No installation needed for ${CMAKE_SYSTEM_NAME}\")")
 endif()
