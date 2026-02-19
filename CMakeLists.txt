@@ -9,9 +9,9 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
         PROJECT_TYPE module
 
         DEPENDENCIES
-            PACKAGES
-                Arieo-Interface-Window
+            ARIEO_PACKAGES
                 Arieo-Core
+                Arieo-Interface-Window
             INTERFACES
                 Arieo-Interface-Window::arieo_window_interface
             PRIVATE_LIBS
@@ -20,8 +20,8 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
 
         SOURCES
             CXX_SOURCES
-                ${CMAKE_CURRENT_SOURCE_DIR}/private/src/*.cpp
-                ${CMAKE_CURRENT_SOURCE_DIR}/private/src/*/*.cpp
+                ${CMAKE_CURRENT_LIST_DIR}/private/src/*.cpp
+                ${CMAKE_CURRENT_LIST_DIR}/private/src/*/*.cpp
     )
 else()
     # Create a dummy install target for non-Linux platforms
