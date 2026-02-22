@@ -1,10 +1,17 @@
 cmake_minimum_required (VERSION 3.31)
 
 include($ENV{ARIEO_BUILD_ENV_PACKAGES_OUTPUT_DIR}/cmake/build_environment.cmake)
-project(ArieoEngine)
+
+ARIEO_PACKAGE(
+    Arieo-Module-X11Window
+    CATEGORY 02_engine
+    DEPENDS
+        https://github.com/BigElderK/Arieo-Core.git@main
+        https://github.com/BigElderK/Arieo-Interface-Window.git@main
+)
 
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
-    arieo_engine_project(
+    ARIEO_ENGINE_PROJECT(
         arieo_x11_window_module
         PROJECT_TYPE module
 
@@ -12,9 +19,8 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
             ARIEO_PACKAGES
                 Arieo-Core
                 Arieo-Interface-Window
-            INTERFACES
-                Arieo-Interface-Window::arieo_window_interface
             PRIVATE_LIBS
+                Arieo-Interface-Window::arieo_window_interface
                 Arieo-Core::arieo_core
                 x11
 
