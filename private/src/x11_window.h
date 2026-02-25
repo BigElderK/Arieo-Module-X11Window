@@ -1,5 +1,6 @@
 #pragma once
 #include "interface/window/window.h"
+#include "base/interface/interface.h"
 
 #include <x11/xlib.h>
 
@@ -61,9 +62,9 @@ namespace Arieo
             return false;
         }
 
-        Interface::Window::IWindowManager* getWindowManager() override
+        Base::Interface<Interface::Window::IWindowManager> getWindowManager() override
         {
-            return m_window_manager;
+            return m_window_manager.get();
         }
 
         Base::StringID getWindowPlatform() override
@@ -73,7 +74,7 @@ namespace Arieo
     private:
         friend class X11WindowManager;
         Window m_x11_window;
-        Interface::Window::IWindowManager* m_window_manager;
+        Base::Interface<Interface::Window::IWindowManager> m_window_manager;
     };
 
     class X11WindowManager final
@@ -88,10 +89,10 @@ namespace Arieo
 
         void* getDisplay() override;
 
-        Interface::Window::IWindow* createWindow(std::uint16_t pos_x, std::uint16_t pos_y, std::uint16_t width, std::uint16_t height) override;
-        void destroyWindow(Interface::Window::IWindow*) override;
+        Base::Interface<Interface::Window::IWindow> createWindow(std::uint16_t pos_x, std::uint16_t pos_y, std::uint16_t width, std::uint16_t height) override;
+        void destroyWindow(Base::Interface<Interface::Window::IWindow>) override;
 
-        Interface::Window::IWindow* getMainWindow() override;
+        Base::Interface<Interface::Window::IWindow> getMainWindow() override;
     public:
         void onInitialize() override;
         void onTick() override;

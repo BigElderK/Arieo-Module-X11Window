@@ -35,7 +35,7 @@ namespace Arieo
         return m_display;
     }
     
-    Interface::Window::IWindow* X11WindowManager::createWindow(std::uint16_t pos_x, std::uint16_t pos_y, std::uint16_t width, std::uint16_t height)
+    Base::Interface<Interface::Window::IWindow> X11WindowManager::createWindow(std::uint16_t pos_x, std::uint16_t pos_y, std::uint16_t width, std::uint16_t height)
     {
         Window window = XCreateSimpleWindow(
             m_display, 
@@ -60,13 +60,13 @@ namespace Arieo
         return ret_win;
     }
 
-    Interface::Window::IWindow* X11WindowManager::getMainWindow()
+    Base::Interface<Interface::Window::IWindow> X11WindowManager::getMainWindow()
     {
         Core::Logger::error("X11WindowManager::getMainWindow() not implemented, using createWindow instead");
         return nullptr;
     }
 
-    void X11WindowManager::destroyWindow(Interface::Window::IWindow* window)
+    void X11WindowManager::destroyWindow(Base::Interface<Interface::Window::IWindow> window)
     {
         X11Window* x11_win = Base::castInterfaceToInstance<X11Window>(window);
         if(x11_win == nullptr)
