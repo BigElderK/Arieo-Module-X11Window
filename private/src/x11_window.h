@@ -64,7 +64,7 @@ namespace Arieo
 
         Base::Interface<Interface::Window::IWindowManager> getWindowManager() override
         {
-            return m_window_manager.get();
+            return m_window_manager;
         }
 
         Base::StringID getWindowPlatform() override

@@ -68,7 +68,7 @@ namespace Arieo
 
     void X11WindowManager::destroyWindow(Base::Interface<Interface::Window::IWindow> window)
     {
-        X11Window* x11_win = Base::castInterfaceToInstance<X11Window>(window);
+        X11Window* x11_win = window.castTo<X11Window>();
         if(x11_win == nullptr)
         {
             Core::Logger::fatal("Cannot get x11 window instances");
