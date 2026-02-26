@@ -11,7 +11,7 @@ namespace Arieo
         : public Interface::Window::IWindow
     {
     public:
-        X11Window(Interface::Window::IWindowManager* window_manager, Window&& x11_window)
+        X11Window(Base::Interface<Interface::Window::IWindowManager> window_manager, Window&& x11_window)
             : m_window_manager(window_manager), m_x11_window(std::move(x11_window))
         {
 
@@ -82,7 +82,7 @@ namespace Arieo
     {
     private:
         Display* m_display = nullptr;
-        std::unordered_set<X11Window*> m_window_set;
+        std::unordered_set<Base::Interface<Interface::Window::IWindow>> m_window_set;
     public:
         void initialize();
         void finalize();
@@ -97,5 +97,10 @@ namespace Arieo
         void onInitialize() override;
         void onTick() override;
         void onDeinitialize() override;
+    
+    public:
+        void setSelf(Base::Interface<Interface::Window::IWindowManager> self) { m_self = self; }
+    private:
+        Base::Interface<Interface::Window::IWindowManager> m_self;
     };
 }
