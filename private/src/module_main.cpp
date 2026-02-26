@@ -14,7 +14,6 @@ namespace Arieo
 
             DllLoader()
             {
-                x11_window_manager->setSelf(x11_window_manager.queryInterface<Interface::Window::IWindowManager>());
                 x11_window_manager->initialize();
                 
                 Core::ModuleManager::registerInstance<Interface::Window::IWindowManager, X11WindowManager>(

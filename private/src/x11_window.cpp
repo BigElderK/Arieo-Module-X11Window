@@ -55,7 +55,7 @@ namespace Arieo
         XMapWindow(m_display, window);
         XSelectInput(m_display, window, KeyPressMask | ButtonPressMask | ExposureMask);
 
-        Base::Interface<Interface::Window::IWindow> ret_win = Base::Interface<Interface::Window::IWindow>::createAs<X11Window>(m_self, std::move(window));
+        Base::Interface<Interface::Window::IWindow> ret_win = Base::Interface<Interface::Window::IWindow>::createAs<X11Window>(m_display, std::move(window));
         m_window_set.insert(ret_win);
         return ret_win;
     }

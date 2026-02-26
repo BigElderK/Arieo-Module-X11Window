@@ -11,8 +11,8 @@ namespace Arieo
         : public Interface::Window::IWindow
     {
     public:
-        X11Window(Base::Interface<Interface::Window::IWindowManager> window_manager, Window&& x11_window)
-            : m_window_manager(window_manager), m_x11_window(std::move(x11_window))
+        X11Window(Display* display, Window&& x11_window)
+            : m_display(display), m_x11_window(std::move(x11_window))
         {
 
         }
@@ -26,7 +26,7 @@ namespace Arieo
         {
             XWindowAttributes w_attributes;
             XGetWindowAttributes(
-                (Display*)m_window_manager->getDisplay(),
+                m_display,
                 m_x11_window,
                 &w_attributes
             );
@@ -43,7 +43,7 @@ namespace Arieo
         {
             XWindowAttributes w_attributes;
             XGetWindowAttributes(
-                (Display*)m_window_manager->getDisplay(),
+                m_display,
                 m_x11_window,
                 &w_attributes
             );
@@ -54,17 +54,12 @@ namespace Arieo
         bool isClosed() override
         {
             XWindowAttributes attrs;
-            if (::XGetWindowAttributes(reinterpret_cast<Display*>(m_window_manager->getDisplay()), m_x11_window, &attrs) == false) 
+            if (::XGetWindowAttributes(m_display, m_x11_window, &attrs) == false) 
             {
                 // Failed to get attributes - window likely closed
                 return true;
             }
             return false;
-        }
-
-        Base::Interface<Interface::Window::IWindowManager> getWindowManager() override
-        {
-            return m_window_manager;
         }
 
         Base::StringID getWindowPlatform() override
@@ -74,7 +69,7 @@ namespace Arieo
     private:
         friend class X11WindowManager;
         Window m_x11_window;
-        Base::Interface<Interface::Window::IWindowManager> m_window_manager;
+        Display* m_display = nullptr;
     };
 
     class X11WindowManager final
@@ -97,10 +92,5 @@ namespace Arieo
         void onInitialize() override;
         void onTick() override;
         void onDeinitialize() override;
-    
-    public:
-        void setSelf(Base::Interface<Interface::Window::IWindowManager> self) { m_self = self; }
-    private:
-        Base::Interface<Interface::Window::IWindowManager> m_self;
     };
 }
