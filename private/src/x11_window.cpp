@@ -17,7 +17,7 @@ namespace Arieo
 
     void X11WindowManager::finalize()
     {
-        for(Base::Interface<Interface::Window::IWindow> window : std::unordered_set(m_window_set))
+        for(Base::Interop<Interface::Window::IWindow> window : std::unordered_set(m_window_set))
         {
             destroyWindow(window);
         }
@@ -35,7 +35,7 @@ namespace Arieo
         return m_display;
     }
     
-    Base::Interface<Interface::Window::IWindow> X11WindowManager::createWindow(std::uint16_t pos_x, std::uint16_t pos_y, std::uint16_t width, std::uint16_t height)
+    Base::Interop<Interface::Window::IWindow> X11WindowManager::createWindow(std::uint16_t pos_x, std::uint16_t pos_y, std::uint16_t width, std::uint16_t height)
     {
         Window window = XCreateSimpleWindow(
             m_display, 
@@ -55,18 +55,18 @@ namespace Arieo
         XMapWindow(m_display, window);
         XSelectInput(m_display, window, KeyPressMask | ButtonPressMask | ExposureMask);
 
-        Base::Interface<Interface::Window::IWindow> ret_win = Base::Interface<Interface::Window::IWindow>::createAs<X11Window>(m_display, std::move(window));
+        Base::Interop<Interface::Window::IWindow> ret_win = Base::Interop<Interface::Window::IWindow>::createAs<X11Window>(m_display, std::move(window));
         m_window_set.insert(ret_win);
         return ret_win;
     }
 
-    Base::Interface<Interface::Window::IWindow> X11WindowManager::getMainWindow()
+    Base::Interop<Interface::Window::IWindow> X11WindowManager::getMainWindow()
     {
         Core::Logger::error("X11WindowManager::getMainWindow() not implemented, using createWindow instead");
         return nullptr;
     }
 
-    void X11WindowManager::destroyWindow(Base::Interface<Interface::Window::IWindow> window)
+    void X11WindowManager::destroyWindow(Base::Interop<Interface::Window::IWindow> window)
     {
         X11Window* x11_win = window.castTo<X11Window>();
         if(x11_win == nullptr)
@@ -88,7 +88,7 @@ namespace Arieo
     void X11WindowManager::onTick()
     {
         XEvent event;
-        for(Base::Interface<Interface::Window::IWindow> window : m_window_set)
+        for(Base::Interop<Interface::Window::IWindow> window : m_window_set)
         {
             X11Window* x11_win = window.castTo<X11Window>();
             if(x11_win == nullptr)
