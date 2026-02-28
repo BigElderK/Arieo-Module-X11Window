@@ -77,7 +77,7 @@ namespace Arieo
         XDestroyWindow(m_display, x11_win->m_x11_window);
 
         m_window_set.erase(window);
-        window.destroyAs<X11Window>();
+        Base::Interop<Interface::Window::IWindow>::destroyAs<X11Window>(std::move(window));
     }
 
     void X11WindowManager::onInitialize()
