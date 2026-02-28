@@ -17,7 +17,7 @@ namespace Arieo
 
     void X11WindowManager::finalize()
     {
-        for(Base::InteropOld<Interface::Window::IWindow> window : std::unordered_set(m_window_set))
+        for(Base::Interop::RawRef<Interface::Window::IWindow> window : std::unordered_set(m_window_set))
         {
             destroyWindow(window);
         }
@@ -35,7 +35,7 @@ namespace Arieo
         return m_display;
     }
     
-    Base::InteropOld<Interface::Window::IWindow> X11WindowManager::createWindow(std::uint16_t pos_x, std::uint16_t pos_y, std::uint16_t width, std::uint16_t height)
+    Base::Interop::RawRef<Interface::Window::IWindow> X11WindowManager::createWindow(std::uint16_t pos_x, std::uint16_t pos_y, std::uint16_t width, std::uint16_t height)
     {
         Window window = XCreateSimpleWindow(
             m_display, 
@@ -55,20 +55,20 @@ namespace Arieo
         XMapWindow(m_display, window);
         XSelectInput(m_display, window, KeyPressMask | ButtonPressMask | ExposureMask);
 
-        Base::InteropOld<Interface::Window::IWindow> ret_win = Base::InteropOld<Interface::Window::IWindow>::createAs<X11Window>(m_display, std::move(window));
+        Base::Interop::RawRef<Interface::Window::IWindow> ret_win = Base::Interop::RawRef<Interface::Window::IWindow>::createAs<X11Window>(m_display, std::move(window));
         m_window_set.insert(ret_win);
         return ret_win;
     }
 
-    Base::InteropOld<Interface::Window::IWindow> X11WindowManager::getMainWindow()
+    Base::Interop::RawRef<Interface::Window::IWindow> X11WindowManager::getMainWindow()
     {
         Core::Logger::error("X11WindowManager::getMainWindow() not implemented, using createWindow instead");
         return nullptr;
     }
 
-    void X11WindowManager::destroyWindow(Base::InteropOld<Interface::Window::IWindow> window)
+    void X11WindowManager::destroyWindow(Base::Interop::RawRef<Interface::Window::IWindow> window)
     {
-        X11Window* x11_win = window.castTo<X11Window>();
+        X11Window* x11_win = window.castToInstance<X11Window>();
         if(x11_win == nullptr)
         {
             Core::Logger::fatal("Cannot get x11 window instances");
@@ -77,7 +77,7 @@ namespace Arieo
         XDestroyWindow(m_display, x11_win->m_x11_window);
 
         m_window_set.erase(window);
-        Base::InteropOld<Interface::Window::IWindow>::destroyAs<X11Window>(std::move(window));
+        Base::Interop::RawRef<Interface::Window::IWindow>::destroyAs<X11Window>(std::move(window));
     }
 
     void X11WindowManager::onInitialize()
@@ -88,9 +88,9 @@ namespace Arieo
     void X11WindowManager::onTick()
     {
         XEvent event;
-        for(Base::InteropOld<Interface::Window::IWindow> window : m_window_set)
+        for(Base::Interop::RawRef<Interface::Window::IWindow> window : m_window_set)
         {
-            X11Window* x11_win = window.castTo<X11Window>();
+            X11Window* x11_win = window.castToInstance<X11Window>();
             if(x11_win == nullptr)
             {
                 Core::Logger::fatal("Cannot get x11 window instances");
@@ -117,3 +117,7 @@ namespace Arieo
 
     }
 }
+
+
+
+
