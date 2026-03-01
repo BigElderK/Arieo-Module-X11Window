@@ -10,24 +10,28 @@ namespace Arieo
 
         static struct DllLoader
         {
-            Base::Instance<X11WindowManager> x11_window_manager;
+            X11WindowManager x11_window_manager_instance;
+            Base::Interop::SharedRef<Interface::Window::IWindowManager> window_manager = Base::Interop::makePersistentShared<Interface::Window::IWindowManager>(x11_window_manager_instance);
 
             DllLoader()
             {
-                x11_window_manager->initialize();
-                
-                Core::ModuleManager::registerInstance<Interface::Window::IWindowManager, X11WindowManager>(
-                    "x11_window_manager", 
-                    x11_window_manager
+                x11_window_manager_instance.initialize();
+
+                Base::Interop::SharedRef<Interface::Main::IMainModule> main_module = Core::ModuleManager::getInterface<Interface::Main::IMainModule>();
+                main_module->registerTickable(window_manager);
+
+                Core::ModuleManager::registerInterface<Interface::Window::IWindowManager>(
+                    "x11_window_manager",
+                    window_manager
                 );
             }
 
             ~DllLoader()
             {
-                Core::ModuleManager::unregisterInstance<Interface::Window::IWindowManager, X11WindowManager>(
-                    x11_window_manager
+                Core::ModuleManager::unregisterInterface<Interface::Window::IWindowManager>(
+                    window_manager
                 );
-                x11_window_manager->finalize();
+                x11_window_manager_instance.finalize();
             }
         } dll_loader;
     }
